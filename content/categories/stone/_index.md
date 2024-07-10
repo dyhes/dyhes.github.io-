@@ -1,7 +1,7 @@
 ---
 title: 他山石
 description: 他山之石，可以攻玉。
-image:
+image:  cover.jpg
 
 # Badge style
 # style:

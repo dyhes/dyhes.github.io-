@@ -1,4 +1,5 @@
 ---
+image:  cover.png
 title: 【NGINX】浅尝
 # description: Math typesetting using KaTeX
 date: 2022-11-09 00:00:00+0000
@@ -16,7 +17,7 @@ Nginx is a web server that can also be used as a reverse proxy, load balancer, m
 
 > Nginx是可以用于反向代理，负载均衡，邮件代理和HTTP缓存的Web服务器
 
-![](https://img2022.cnblogs.com/blog/2369386/202211/2369386-20221109201921081-1294800408.png)
+![](image1.png)
 
 
 ## Installation
@@ -33,7 +34,7 @@ sudo apt install nginx
 systemctl status nginx
 ```
 
-![](https://img2022.cnblogs.com/blog/2369386/202211/2369386-20221109202023436-1812887101.png)
+![](image2.png)
 
 
 **管理**
@@ -71,11 +72,6 @@ sudo systemctl enable nginx
 
   context内的键值对
 
-## Load Balance
-
-![](https://img2022.cnblogs.com/blog/2369386/202211/2369386-20221109202105232-1499985114.png)
-![](https://img2022.cnblogs.com/blog/2369386/202211/2369386-20221109202120702-1771113407.png)
-
 ## Bugs
 
 ### css text/plain
@@ -84,7 +80,7 @@ NGINX: CSS was not loaded because its MIME type, "text/plain", is not "text/css"
 
 修改为
 
-![](https://img2022.cnblogs.com/blog/2369386/202211/2369386-20221109202136034-795829651.png)
+![](image3.png)
 
 
 后仍未加载
