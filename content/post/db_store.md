@@ -1,7 +1,7 @@
 ---
 title: 【Mac】.DB_Store file
 date: 2024-07-10 00:00:00+0000
-image: /covers/cover20.png
+image: /covers/cover20.jpg
 categories: 
     - nutrition
 tags:
