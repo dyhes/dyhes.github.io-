@@ -1,5 +1,5 @@
 ---
-title: Many-to-Many Relationship
+title: Many-Many Relationship
 date: 2024-07-10 00:00:00+0000
 image: /covers/cover20.jpg
 categories: 
@@ -8,57 +8,98 @@ categories:
 tags:
     - Spring Data JPA
     - Spring Boot
-math: true
 ---
-忙于构建个人博客，没有什么进展
+## @ManyToMany
+The @ManyToMany annotation is used in Java persistence frameworks, particularly in Java Persistence API (JPA) and Object-Relational Mapping (ORM) tools like Hibernate. It’s used to define a **many-to-many relationship** between two entities.
 
-## Knowledge
-### Java Record
-Java records were **introduced in Java 14** as a preview feature and became a s**tandard feature in Java 16**. They provide a compact syntax for declaring classes that are used primarily to store data. Records are designed to reduce boilerplate code and make it easier to create **simple, immutable** data carriers.
-Syntax:
-```java
-public record Person(String name, int age) { }
-```
-Automatic generation:
-
-* A constructor with parameters for all components
-
-* Accessor methods for each component (e.g., name() and age())
-* equals() and hashCode() methods
-* toString() method
-Immutability:
-* Records are implicitly final and cannot be extended.
-* The fields (components) of a record are final by default.
-Constructors:
-* You can define custom constructors, including compact constructors.
-* A compact constructor doesn’t need to explicitly list all fields:
+* Relationship: It represents a relationship where multiple instances of one entity can be associated with multiple instances of another entity.
+* Database representation: In a relational database, this is typically implemented using a join table that contains foreign keys to both entities.
+* Bidirectional vs Unidirectional: The relationship can be **bidirectional** (defined on both entities) or **unidirectional** (defined on only one entity, namely the owning one).
+* Usage: It’s typically used on a **collection field** in an entity class.
+* Join Table: By default, JPA will create a join table, but you can **customize** this using the **@JoinTable** annotation.
 
 ```java
-public record Person(String name, int age) {
-    public Person {
-        if (age < 0) {
-            throw new IllegalArgumentException("Age cannot be negative");
-        }
-    }
+@Entity
+@Table("students")
+public class Student {
+    @Id
+    @GeneratedValue
+    private Long id;
+    
+    private String name;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "student_course",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> signedCourses;
+    
+    // getters and setters
+}
+
+@Entity
+@Table("courses")
+public class Course {
+    @Id
+    @GeneratedValue
+    private Long id;
+    
+    private String name;
+    
+    @ManyToMany(mappedBy = "signedCourses")
+    private Set<Student> students;
+    
+    // getters and setters
 }
 ```
-Additional methods:You can add other methods to a record, just like in a regular class.
-Limitations:
-* Records cannot extend other classes (they implicitly extend java.lang.Record).
-* They cannot declare instance fields other than the private final fields for the components of the state description.
-* They cannot be abstract.
-### Internationalization
-Internationalization (i18n) is typically handled on both the front end and the back end, but the approach and responsibilities can vary depending on the specific requirements of your application. 
 
-In many modern web applications, the front end handles a significant portion of i18n, especially for single-page applications (SPAs) and client-heavy architectures. This approach allows for more responsive user experiences and reduces server load.
+In this example:
+* A student can enroll in multiple courses, and a course can have multiple students.
+* The @JoinTable annotation specifies the details of the join table.
+* The mappedBy attribute in the Course entity indicates that Student is the owning side of the relationship.
 
-However, some aspects of i18n are better suited for the back end, particularly when dealing with sensitive data, complex business logic, or when you need to generate localized content server-side.
+When using @ManyToMany, consider these best practices:
+* **Use Set** instead of List to avoid duplicate entries.
+* Be cautious with bidirectional relationships, as they can **lead to performance issues** if not managed properly.
+* Consider using **lazy loading** (fetch = FetchType.LAZY) to improve performance.
+* In some cases, it might be better to model the relationship as **two one-to-many** relationships with an intermediate entity, especially if you need to store **additional information** about the relationship.
+## mappedBy
+The mappedBy attribute in a @ManyToMany relationship is used to indicate the non-owning side of a **bidirectional** relationship. 
+* In a @ManyToMany relationship, one side needs to be the owning side, and the other is the non-owning (inverse) side.
+* The owning side is where **the @JoinTable is specified** (if using a custom join table).
+* The non-owning side uses mappedBy to **refer to the property** on the owning side.
+Key Points
+* **Only** the owning side of the relationship is responsible for updating the join table.
+* Changes made to the non-owning side **won’t be reflected in the database** unless the owning side is also updated.
+Benefits
+* **Prevents duplicate** join tables.
+* Clarifies which side of the relationship is responsible for managing the association.
+Common Mistake:
+* Forgetting to specify mappedBy on one side, which can lead to **two separate join table**s being created.
+Bidirectional Relationship Management:
+* Even though mappedBy is specified, you typically need to update both sides of the relationship in your Java code **for consistency.**
+  ```java
+  student.getCourses().add(course);
+  course.getStudents().add(student);
+  ```
+Database Perspective:
+* The database structure is the same regardless of which side is the owning side.
+* The choice affects how JPA manages the relationship, not the underlying database schema.
+## lazy loading
+* Lazy loading means that an object **doesn’t load all of its associated data** from the database when it’s first retrieved.
+* Instead, it loads only the data it needs immediately and loads other related data **only when it’s specifically requested**.
+In ORM Context:
+* When you fetch an entity from the database, lazy loading allows you to retrieve the entity **without immediately loading all of its associated entities or collections**.
+* The associated data is loaded only when you try to **access it**.
+When to use:
+* Use lazy loading for associations that are not always needed.
+* Use eager loading for associations that are almost always needed with the main entity.
+Implementation:
+* In JPA, lazy loading is often the default **for collection associations** (@OneToMany, @ManyToMany).
+* **For single-valued associations** (@ManyToOne, @OneToOne), eager loading is usually the default.
+Best Practices:
+* Use lazy loading as the default strategy.
+* Switch to eager loading only when you’re certain that the related data is always needed.
 
-**Best practices**
-
-Best practices often involve a combination of both:
-
-Use front-end i18n libraries for UI elements and client-side formatting.
-Implement back-end i18n for database content, emails, and API responses.
-Use content delivery networks (CDNs) or static file hosting for language resource files.
-Consider using a translation management system (TMS) to streamline the translation process.

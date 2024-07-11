@@ -1,0 +1,162 @@
+---
+title: 【Postopia Dev Log】Day 3
+date: 2024-07-09 00:00:00+0000
+image: /covers/cover14.png
+categories: 
+    - moon
+    - snow
+tags:
+    - Postopia
+math: true
+---
+遇到一个好像很有用的网站 [Programming & DevOps news, tutorials & tools](https://dzone.com/)
+
+实现了一个BadRequestExceptionHandler
+
+Spring Security 有点复杂，没找到好的参考资料
+
+在claude 3.5的帮助下初步实现了基于简单jwt的Authentication
+
+测试filter的时候不小心调用了两次chain.doFilter导致返回的json数据是重复的两份
+[Duplicate Json in Spring Boot Response](https://stackoverflow.com/questions/73892445/duplicate-json-in-spring-boot-response)
+
+## Knowledge
+### Keycloak
+Keycloak is an open-source Identity and Access Management (IAM) solution developed by Red Hat. It provides a comprehensive set of features for managing authentication and authorization in modern applications.
+#### Key Features
+**1** **Single Sign-On (SSO)**: Keycloak allows users to authenticate once and access multiple applications without re-entering credentials.
+
+
+**2** **Identity Brokering**: It can integrate with external identity providers like Google, Facebook, or other SAML 2.0 or OpenID Connect providers.
+
+**3** **User Federation**: Keycloak can sync with existing LDAP or Active Directory servers.
+
+**4** **Customizable Authentication**: Supports various authentication mechanisms including password, OTP, and custom authenticators.
+
+**5** **Fine-grained Authorization**: Provides role-based access control (RBAC) and attribute-based access control (ABAC).
+
+**6** **Admin Console**: Offers a user-friendly interface for managing users, roles, clients, and realm settings.
+
+**7** **Standard Protocols**: Supports OAuth 2.0, OpenID Connect, and SAML 2.0.
+
+**8** **Client Adapters**: Provides adapters for easy integration with various application stacks.
+
+**9** **Themes and Internationalization**: Allows customization of login pages and supports multiple languages.
+
+**10** **Social Login**: Enables users to log in using their social media accounts.
+### Oauth2
+#### Involved Actors
+**i) Resource Server**: The server hosting user-owned resources that are protected by OAuth2. The resource server validates the access-token and serves the protected resources.
+
+**ii) Resource Owner**: Typically, the user of the application is the resource owner. The resource owner has the ability to grant or deny access to their own data hosted on the resource server.
+
+**iii) Authorization Server**: The authorization server gets consent from the resource owner and issues access tokens to clients for accessing protected resources hosted by a resource server.
+
+**iv) Client**: An application making API requests to perform actions on protected resources on behalf of the resource owner. Before it may do so, it must be authorized by the resource owner, and the authorization must be validated by resource server/authorization server. OAuth2 defines two client types, based on their ability to authenticate securely with the authorization server (i.e., ability to **maintain the confidentiality** of their client credentials):
+
+**a)Confidential**: Clients capable of maintaining the confidentiality of their credentials. Confidential clients are implemented on a secure server with restricted access to the client credentials (e.g., a web application running on a **web server**).
+
+**b) Public**: Clients incapable of maintaining the confidentiality of their credentials (e.g. an installed native application or a **web browser-based application**), and incapable of secure client authentication via any other means.
+#### **Authorization Grant Types**
+To get the access token, the client obtains authorization from the resource owner. The authorization is expressed in the form of an **authorization grant, which the client uses to request the access token.** OAuth2 defines four standard grant types: authorization code, implicit, resource owner password credentials, and client credentials. It also provides an extension mechanism for defining additional grant types.
+
+**i) Authorization Code Grant**: this grant type is optimized for confidential clients (web application server). The authorization code flow **does not expose the access token to the resource owner’s browser**. Instead, authorization is accomplished using an intermediary “authorization code” that is passed through the browser. This code must be exchanged for an access token before calls can be made to protected APIs.
+
+**ii) Implicit Grant**: this grant type is suitable **for public clients**. The implicit grant flow **does not accommodate refresh tokens**. If the authorization server expires access tokens regularly, your application will need to run through the authorization flow whenever it needs access. In this flow, an access token is immediately returned to the client after a user grants the requested authorization. An **intermediate authorization code is not required** as it is in the authorization code grant.
+
+**iii) Resource Owner Password Credentials**: the resource owner password credentials grant type is suitable in cases where **the resource owner has a trust relationship with the client**, and the resource owner agrees to share hise/her credentials (username, password) with the client. Then the client can use resources from the owner's credentials to get the access token from the authorization server.
+
+**iv) Client Credentials**: this grant type is suitable when **the client itself owns the data and does not need delegated access from a resource owner**, or delegated access has already been granted to the application outside of a typical OAuth flow. In this flow, user consent is not involved. The client exchanges his client credentials to get an access token.
+### Transactions
+A database transaction is a sequence of one or more database operations that are treated as a single unit of work. Transactions adhere to the ACID properties:
+
+**1** **Atomicity**: All operations in a transaction either complete successfully or fail altogether. There's no partial completion.
+
+**2** **Consistency**: A transaction brings the database from one valid state to another. All rules and constraints must be satisfied.
+
+**3** **Isolation**: Concurrent execution of transactions results in a state that would be obtained if transactions were executed sequentially.
+
+**4** **Durability**: Once a transaction has been committed, it will remain so, even in the event of power loss, crashes, or errors.
+#### Isolation level
+Isolation levels define how transaction integrity is visible to other users and systems. They provide a trade-off between consistency and performance.
+#### 1. READ UNCOMMITTED
+* Lowest isolation level
+* One transaction may read not-yet-committed changes made by other transactions ("dirty reads")
+```sql
+Transaction 1: UPDATE Account SET balance = balance - 100 WHERE account_id = 'A';
+Transaction 2: SELECT balance FROM Account WHERE account_id = 'A'; -- May read the updated (uncommitted) balance
+Transaction 1: ROLLBACK;
+```
+#### 2. READ COMMITTED
+* A transaction only sees data committed before the transaction began
+* Prevents dirty reads, but "non-repeatable reads" can occur
+```sql
+Transaction 1: SELECT balance FROM Account WHERE account_id = 'A'; -- Reads original balance
+Transaction 2: UPDATE Account SET balance = balance - 100 WHERE account_id = 'A';
+Transaction 2: COMMIT;
+Transaction 1: SELECT balance FROM Account WHERE account_id = 'A'; -- Reads new balance
+```
+#### 3. REPEATABLE READ
+* Ensures that if a transaction reads a row, it will consistently see the same data for that row until the transaction completes
+* Prevents non-repeatable reads, but "phantom reads" can occur
+```sql
+Transaction 1: SELECT * FROM Account WHERE balance > 1000;
+Transaction 2: INSERT INTO Account (account_id, balance) VALUES ('C', 1500);
+Transaction 2: COMMIT;
+Transaction 1: SELECT * FROM Account WHERE balance > 1000; -- May see the new account (phantom read)
+```
+#### 4. SERIALIZABLE
+* Highest isolation level
+* Transactions are completely isolated from one another
+* Prevents dirty reads, non-repeatable reads, and phantom reads
+```sql
+Transaction 1: SELECT * FROM Account WHERE balance > 1000;
+Transaction 2: INSERT INTO Account (account_id, balance) VALUES ('C', 1500); -- This will be blocked until Transaction 1 completes
+Transaction 1: SELECT * FROM Account WHERE balance > 1000; -- Will not see any changes made by other transactions
+```
+##### Concurrency Issues
+**1** **Dirty Read**: Reading uncommitted data from another transaction.
+
+**2** **Non-Repeatable Read**: Getting different results when reading the same row twice in the same transaction.
+
+**3** **Phantom Read**: Getting different results when querying for a range of rows twice in the same transaction.
+
+⠀Isolation Level Comparison
+| Isolation Level | Dirty Read | Non-Repeatable Read | Phantom Read |
+|:-:|:-:|:-:|:-:|
+| READ UNCOMMITTED | Possible | Possible | Possible |
+| READ COMMITTED | Prevented | Possible | Possible |
+| REPEATABLE READ | Prevented | Prevented | Possible |
+| SERIALIZABLE | Prevented | Prevented | Prevented |
+
+Higher isolation levels provide more consistency but may reduce concurrency and impact performance.
+
+Many applications use READ COMMITTED as a default, as it provides a good balance between consistency and performance.
+### @Transactional
+When you annotate a method with @Transactional, Spring will start a transaction before the method executes and commit it after the method completes. If **an exception is thrown**, the transaction will be rolled back.
+
+You can place @Transactional on a method or a class. If placed on a class, **all public methods** of the class become transactional.(@Transactional only works on **public** methods)
+By default, transactions roll back on **runtime exceptions**. 
+
+You can customize
+```java
+@Transactional(rollbackFor = {CustomException.class})
+```
+In Spring Boot applications, transaction management is automatically enabled. In other Spring applications, you need to explicitly enable it with @EnableTransactionManagement.
+scenarios:
+* Multiple Database Operations
+* Read Operations Requiring Consistency
+* …
+**Service Layer Methods** It's often a good practice to put @Transactional on service-layer methods rather than repository methods or controllers.
+Don't use @Transactional for **single, simple database operations** - the underlying repository methods are often already transactional.
+## Articles
+[Spring REST API + OAuth2 + Angular](https://www.baeldung.com/rest-api-spring-oauth2-angular)
+
+[Keycloak Embedded in a Spring Boot Application](https://www.baeldung.com/keycloak-embedded-in-spring-boot-app)
+
+[Secure Spring REST With Spring Security and OAuth2](https://dzone.com/articles/secure-spring-rest-with-spring-security-and-oauth2)
+
+[OAuth 2.0 Beginner's Guide](https://dzone.com/articles/oauth-20-beginners-guide)
+
+[OAuth Patterns and Anti-Patterns](https://dzone.com/refcardz/oauth-patterns-and-anti-patterns)
+
