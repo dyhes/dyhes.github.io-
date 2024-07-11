@@ -3,6 +3,7 @@ title: 【Spring Boot in practice】笔记
 date: 2024-07-02 00:00:00+0000
 categories: 
     - millet
+    - willow
 tags:
     - Spring Boot
 math: true
