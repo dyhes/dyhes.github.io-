@@ -1,5 +1,5 @@
 ---
-title: 【Postopia Dev Log】Day 5
+title: 【Postopia Dev Log】Day 6
 date: 2024-07-12 00:00:00+0000
 categories: 
     - moon
