@@ -8,7 +8,6 @@ tags:
     - Postopia
 math: true
 ---
-# Day5
 深入了解了@ManyToMany, @ManyToOne, @OneToMany, @OneToOne 这几个注解以及java中的日期时间及其在数据库里的使用
 
 定义了Comment, Space 等 model
