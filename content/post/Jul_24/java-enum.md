@@ -13,7 +13,9 @@ Java enums are a special type of class used to define collections of constants. 
 ## Key Points
 * Implicitly final and static: Enum constants are implicitly public, static, and final.
 * values() method: Every enum has a static values() method that returns an array of all enum constants.
-* valueOf(String) method: This static method returns the enum constant with the specified name.
+* valueOf(String) method: This static method returns the **enum constant** with the specified name.
+* The name() method returns the name of the enum constant as declared in its enum declaration. It's an instance method available on all enum constants.
+* valueOf(String) and name() provide a way to convert between the Enum and String.
 * ordinal() method: Returns the **position** of the enum constant (zero-based).
 * Constructors, Fields, and Methods: Enums can have constructors, fields, and methods, allowing you to associate data and behavior with each constant.
 * Implementing Interfaces: Enums can implement interfaces, providing a way to define behavior for each constant.

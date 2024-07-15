@@ -1,7 +1,6 @@
 ---
 title: 【Spring Data JPA】Pageable and Sort
 date: 2024-07-14 00:00:00+0000
-image: /covers/cover.png
 categories: 
     - nutrition
     - willow

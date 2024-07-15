@@ -39,7 +39,7 @@ int updateUserStatusByLastLoginDate(@Param("status") int status, @Param("date") 
 ```
 ## JPQL (Java Persistence Query Language)
 JPQL is a query language similar to SQL, but it operates **on JPA entity objects** rather than database tables. It's used to define queries against entities to search for and retrieve entity objects. JPQL is **database-independent**, which means you can write queries that work across different database systems.
-#### JOIN
+## JOIN
 In database terms, a JOIN is an operation that **combines rows from two or more tables based on a related column between them**. In the context of JPQL, a JOIN allows you to fetch associated entities based on their relationships.
 ### Type
 #### Entity Definition
