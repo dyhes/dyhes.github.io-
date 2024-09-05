@@ -4,7 +4,7 @@ date: 2024-07-10 00:00:00+0000
 image: /covers/cover20.jpg
 categories: 
     - nutrition
-    - star
+    - nutrition
 tags:
 ---
 提代码的时候发现change里有两个名为.DB_Store文件，查了一下是什么东西，记录一下。

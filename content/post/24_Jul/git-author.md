@@ -2,7 +2,7 @@
 title: 【Git】Update Author Information
 date: 2024-07-13 00:00:00+0000
 categories: 
-    - star
+    - nutrition
 tags:
     - Git
 ---
