@@ -4,6 +4,7 @@ date: 2024-07-12 00:00:00+0000
 image: /covers/cover9.png
 categories: 
     - nutrition
+    - temple
 tags:
     - Java
 ---

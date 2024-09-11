@@ -5,6 +5,7 @@ image: /covers/cover19.png
 categories: 
     - nutrition
     - willow
+    - temple
 tags:
     - Java
     - Spring Data JPA
