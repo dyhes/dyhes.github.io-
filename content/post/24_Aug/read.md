@@ -4,8 +4,6 @@ title: 【Life Hacks】Read faster
 date: 2024-08-02 00:00:00+0000
 categories: 
     - deer
-tags:
-    - Life Hacks
 ---
 
 ## How to read faster

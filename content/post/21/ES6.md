@@ -1,11 +1,11 @@
 ---
 title: 【JS】ES6
-date: 2021-02-19 00:00:00+0000
+date: 2021-04-19 00:00:00+0000
 categories: 
 -  nutrition
 -  temple
 tags:
--   JS
+-  JS
 ---
 
 ## Parameter
