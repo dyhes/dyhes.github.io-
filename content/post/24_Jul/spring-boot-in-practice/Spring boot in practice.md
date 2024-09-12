@@ -1,5 +1,5 @@
 ---
-title: 【Spring Boot in practice】笔记
+title: 【Spring Boot in practice】Notes
 date: 2024-07-02 00:00:00+0000
 categories: 
     - millet
