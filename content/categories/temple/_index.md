@@ -4,7 +4,7 @@ description: 天上白玉京，十二楼五城。仙人抚我顶，结发受长�
 image:  /covers/cover12.png
 
 # Badge style
-# style:
-#     background: "#2a9d8f"
+style:
+    background: "#69a794"
 #     color: "#fff"
 ---
