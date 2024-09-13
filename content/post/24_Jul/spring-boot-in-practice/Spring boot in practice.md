@@ -8,7 +8,7 @@ tags:
     - Spring Boot
 math: true
 ---
-
+[Link](https://reader-service.fcdn.sk/?source=3c6b6838ceb712e38b66a0ca2cde230f44274dac2f09fba71ffdc61842816357&download_location=https%3A%2F%2Fsinglelogin.re%2Fdl%2F21754907%2F994075)
 
 ## Spring boot
 Spring Boot is an open source extension of the Spring Framework designed to simplify the Spring application development.
