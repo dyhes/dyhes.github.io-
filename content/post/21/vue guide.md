@@ -767,7 +767,7 @@ export function useFetch(url) {
 }
 ```
 
- <script setup>  is the only place where you can call composables after usage of await. The compiler automatically restores the active instance context after the async operation for you.
+ `<script setup>`  is the only place where you can call composables after usage of await. The compiler automatically restores the active instance context after the async operation for you.
 
 To some extent, you can think of these extracted cas component-scoped services that can talk to one another.
 

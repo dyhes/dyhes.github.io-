@@ -107,7 +107,7 @@ It's important for web performance optimization to include everything the browse
 
   The **first** step is processing the HTML markup and building the DOM tree. HTML parsing involves **tokenization** and **tree construction**. HTML tokens include start and end tags, as well as attribute names and values. If the document is well-formed, parsing it is straightforward and faster. The parser parses tokenized input into the document, building up the document tree.
 
-  When the parser finds **non-blocking** resources, such as an image, the browser will request those resources and continue parsing. Parsing can continue when a **CSS file is encountered**, but <script> tags—particularly those without an async or defer attribute—**block rendering**, and pause the parsing of HTML. Though the browser's preload scanner hastens this process, excessive scripts can still be a significant bottleneck.
+  When the parser finds **non-blocking** resources, such as an image, the browser will request those resources and continue parsing. Parsing can continue when a **CSS file is encountered**, but `<script>` tags—particularly those without an async or defer attribute—**block rendering**, and pause the parsing of HTML. Though the browser's preload scanner hastens this process, excessive scripts can still be a significant bottleneck.
 
   * Preload Scanner
 
@@ -179,6 +179,3 @@ Once the main thread is done **painting** the page, you would think we would be 
 ##### TTI(Time to Interactive)
 
 TTI is the measurement of how long it took from that **first request** which led to the DNS lookup to when the **page is interactive**.
-
-
-
