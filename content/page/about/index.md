@@ -10,7 +10,7 @@ menu:
   main:
     params:
       icon: user
-    weight: 4
+    weight: 2
 slug: about
 title: About
 ---
